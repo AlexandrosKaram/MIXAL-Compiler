@@ -372,16 +372,69 @@ static char *yy_last_accepting_cpos;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 ".\\simple_lang.l"
+#line 1 "simple_lang.l"
 #define INITIAL 0
-#line 2 ".\\simple_lang.l"
+#line 2 "simple_lang.l"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "simple_lang.tab.h"
 
+// Define constants
 #define N 8   // number of keywords
+
+// Symbol table functions
+typedef struct Symbol {
+    char *name;
+    int token;       // Token type (e.g., ID, keyword)
+    struct Symbol *next; // Pointer to next symbol in case of hash collision
+} Symbol;
+
+#define HASH_SIZE 101
+
+Symbol *symbolTable[HASH_SIZE];
+
+// Hash function
+unsigned int hash(char *s) {
+    unsigned int hashval;
+    for (hashval = 0; *s != '\0'; s++) {
+        hashval = *s + 31 * hashval;
+    }
+    return hashval % HASH_SIZE;
+}
+
+// Lookup symbol in the symbol table
+Symbol *lookup(char *name) {
+    Symbol *sp;
+    for (sp = symbolTable[hash(name)]; sp != NULL; sp = sp->next) {
+        if (strcmp(sp->name, name) == 0)
+            return sp; // found
+    }
+    return NULL; // not found
+}
+
+// Insert symbol into the symbol table
+Symbol *insert(char *name, int token) {
+    Symbol *sp;
+    unsigned int hashval;
+
+    if ((sp = lookup(name)) == NULL) {
+        sp = (Symbol *) malloc(sizeof(*sp));
+        if (sp == NULL || (sp->name = strdup(name)) == NULL)
+            return NULL;
+
+        hashval = hash(name);
+        sp->token = token;
+        sp->next = symbolTable[hashval];
+        symbolTable[hashval] = sp;
+    }
+    return sp;
+}
+
+// Function to check if the identifier is a keyword
 int id_or_keyword(char *s);
-#line 385 "lex.yy.c"
+
+#line 438 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -532,10 +585,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 10 ".\\simple_lang.l"
+#line 63 "simple_lang.l"
 
 
-#line 539 "lex.yy.c"
+#line 592 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -620,7 +673,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 12 ".\\simple_lang.l"
+#line 65 "simple_lang.l"
 {
                                strcpy(yylval.ystr, yytext);
                                return DEC_CONST;
@@ -628,7 +681,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 17 ".\\simple_lang.l"
+#line 70 "simple_lang.l"
 {
                                strcpy(yylval.ystr, yytext);
                                return '*';
@@ -636,7 +689,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 22 ".\\simple_lang.l"
+#line 75 "simple_lang.l"
 {
                                strcpy(yylval.ystr, yytext);
                                return '/';
@@ -644,7 +697,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 27 ".\\simple_lang.l"
+#line 80 "simple_lang.l"
 {
                                strcpy(yylval.ystr, yytext);
                                return '+';
@@ -652,7 +705,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 32 ".\\simple_lang.l"
+#line 85 "simple_lang.l"
 {
                                strcpy(yylval.ystr, yytext);
                                return '-';
@@ -660,7 +713,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 37 ".\\simple_lang.l"
+#line 90 "simple_lang.l"
 {
                                strcpy(yylval.ystr, yytext);
                                return '(';
@@ -668,7 +721,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 42 ".\\simple_lang.l"
+#line 95 "simple_lang.l"
 {
                                strcpy(yylval.ystr, yytext);
                                return ')';
@@ -676,7 +729,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 47 ".\\simple_lang.l"
+#line 100 "simple_lang.l"
 {
                                strcpy(yylval.ystr, yytext);
                                return ';';
@@ -684,15 +737,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 52 ".\\simple_lang.l"
+#line 105 "simple_lang.l"
 {
                                strcpy(yylval.ystr, yytext);
-                               return ':=';
+                               return ASSIGN;
                             }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 57 ".\\simple_lang.l"
+#line 110 "simple_lang.l"
 {
                                strcpy(yylval.ystr, yytext);
                                return '<';
@@ -700,7 +753,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 62 ".\\simple_lang.l"
+#line 115 "simple_lang.l"
 {
                                strcpy(yylval.ystr, yytext);
                                return '=';
@@ -708,26 +761,34 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 67 ".\\simple_lang.l"
+#line 120 "simple_lang.l"
 {
-                               int token_type = id_or_keyword(yytext);
-                               if (token_type) {
-                                   yylval.yint = token_type;
-                                   return token_type;
+                               Symbol *sym = lookup(yytext);
+                               if (!sym) {
+                                   int token_type = id_or_keyword(yytext);
+                                   if (token_type) {
+                                       yylval.yint = token_type;
+                                       insert(yytext, token_type);
+                                       return token_type;
+                                   } else {
+                                       strcpy(yylval.ystr, yytext);
+                                       insert(yytext, ID);
+                                       return ID;
+                                   }
                                } else {
                                    strcpy(yylval.ystr, yytext);
-                                   return ID;
+                                   return sym->token;
                                }
                             }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 78 ".\\simple_lang.l"
+#line 139 "simple_lang.l"
 ; // ignore whitespace
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 80 ".\\simple_lang.l"
+#line 141 "simple_lang.l"
 {
                                printf("Illegal character %s\n", yytext);
                                return 0;
@@ -735,10 +796,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 85 ".\\simple_lang.l"
+#line 146 "simple_lang.l"
 ECHO;
 	YY_BREAK
-#line 742 "lex.yy.c"
+#line 803 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1624,9 +1685,10 @@ int main()
 	return 0;
 	}
 #endif
-#line 85 ".\\simple_lang.l"
+#line 146 "simple_lang.l"
 
 
+// Keywords and their corresponding token types
 static char *keywords[N] = {
     "if", "then", "else", "end", "repeat", "until", "read", "write"
 };

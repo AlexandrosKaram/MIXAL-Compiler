@@ -3,57 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "simple_lang.tab.h"
+#include "symbol_table.h"
 
 // Define constants
 #define N 8   // number of keywords
-
-// Symbol table functions
-typedef struct Symbol {
-    char *name;
-    int token;       // Token type (e.g., ID, keyword)
-    struct Symbol *next; // Pointer to next symbol in case of hash collision
-} Symbol;
-
-#define HASH_SIZE 101
-
-Symbol *symbolTable[HASH_SIZE];
-
-// Hash function
-unsigned int hash(char *s) {
-    unsigned int hashval;
-    for (hashval = 0; *s != '\0'; s++) {
-        hashval = *s + 31 * hashval;
-    }
-    return hashval % HASH_SIZE;
-}
-
-// Lookup symbol in the symbol table
-Symbol *lookup(char *name) {
-    Symbol *sp;
-    for (sp = symbolTable[hash(name)]; sp != NULL; sp = sp->next) {
-        if (strcmp(sp->name, name) == 0)
-            return sp; // found
-    }
-    return NULL; // not found
-}
-
-// Insert symbol into the symbol table
-Symbol *insert(char *name, int token) {
-    Symbol *sp;
-    unsigned int hashval;
-
-    if ((sp = lookup(name)) == NULL) {
-        sp = (Symbol *) malloc(sizeof(*sp));
-        if (sp == NULL || (sp->name = strdup(name)) == NULL)
-            return NULL;
-
-        hashval = hash(name);
-        sp->token = token;
-        sp->next = symbolTable[hashval];
-        symbolTable[hashval] = sp;
-    }
-    return sp;
-}
 
 // Function to check if the identifier is a keyword
 int id_or_keyword(char *s);
