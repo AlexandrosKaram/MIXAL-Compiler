@@ -296,7 +296,7 @@ static yyconst int yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    2,    2,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    4,
+        1,    2,    1,    1,    1,    1,    1,    1,    1,    4,
         5,    6,    7,    1,    8,    1,    9,   10,   10,   10,
        10,   10,   10,   10,   10,   10,   10,   11,   12,   13,
        14,    1,    1,    1,   15,   15,   15,   15,   15,   15,
@@ -377,12 +377,11 @@ char *yytext;
 #line 2 ".\\simple_lang.l"
 #include <stdio.h>
 #include <string.h>
-// #include "y.tab.h"
+#include "simple_lang.tab.h"
 
-int id_or_keyword(char *s);
 #define N 8   // number of keywords
-
-#line 386 "lex.yy.c"
+int id_or_keyword(char *s);
+#line 385 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -533,10 +532,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 11 ".\\simple_lang.l"
+#line 10 ".\\simple_lang.l"
 
 
-#line 540 "lex.yy.c"
+#line 539 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -621,113 +620,125 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 13 ".\\simple_lang.l"
+#line 12 ".\\simple_lang.l"
 {
-    printf("%s", yytext);    
-}
+                               strcpy(yylval.ystr, yytext);
+                               return DEC_CONST;
+                            }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 16 ".\\simple_lang.l"
+#line 17 ".\\simple_lang.l"
 {
-    printf("*");
-}
+                               strcpy(yylval.ystr, yytext);
+                               return '*';
+                            }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 19 ".\\simple_lang.l"
+#line 22 ".\\simple_lang.l"
 {
-    printf("/");
-}
+                               strcpy(yylval.ystr, yytext);
+                               return '/';
+                            }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 22 ".\\simple_lang.l"
+#line 27 ".\\simple_lang.l"
 {
-    printf("+");
-}
+                               strcpy(yylval.ystr, yytext);
+                               return '+';
+                            }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 25 ".\\simple_lang.l"
+#line 32 ".\\simple_lang.l"
 {
-    printf("-");
-}
+                               strcpy(yylval.ystr, yytext);
+                               return '-';
+                            }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 28 ".\\simple_lang.l"
+#line 37 ".\\simple_lang.l"
 {
-    printf("(");
-}
+                               strcpy(yylval.ystr, yytext);
+                               return '(';
+                            }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 31 ".\\simple_lang.l"
+#line 42 ".\\simple_lang.l"
 {
-    printf(")");
-}
+                               strcpy(yylval.ystr, yytext);
+                               return ')';
+                            }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 34 ".\\simple_lang.l"
+#line 47 ".\\simple_lang.l"
 {
-    printf(";");
-}
+                               strcpy(yylval.ystr, yytext);
+                               return ';';
+                            }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 37 ".\\simple_lang.l"
+#line 52 ".\\simple_lang.l"
 {
-    printf(":=");
-}
+                               strcpy(yylval.ystr, yytext);
+                               return ':=';
+                            }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 40 ".\\simple_lang.l"
+#line 57 ".\\simple_lang.l"
 {
-    printf("<");
-}
+                               strcpy(yylval.ystr, yytext);
+                               return '<';
+                            }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 43 ".\\simple_lang.l"
+#line 62 ".\\simple_lang.l"
 {
-    printf("=");
-}
+                               strcpy(yylval.ystr, yytext);
+                               return '=';
+                            }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 46 ".\\simple_lang.l"
+#line 67 ".\\simple_lang.l"
 {
-    int keyword_index = id_or_keyword(yytext);
-    if (keyword_index != 0) {
-        printf("Keyword: %s\n", yytext);
-    } else {
-        printf("ID: %s\n", yytext); 
-    }
-}
+                               int token_type = id_or_keyword(yytext);
+                               if (token_type) {
+                                   yylval.yint = token_type;
+                                   return token_type;
+                               } else {
+                                   strcpy(yylval.ystr, yytext);
+                                   return ID;
+                               }
+                            }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 54 ".\\simple_lang.l"
-{
-    // ignore whitespace
-}
+#line 78 ".\\simple_lang.l"
+; // ignore whitespace
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 57 ".\\simple_lang.l"
+#line 80 ".\\simple_lang.l"
 {
-    printf("Invalid character: %s\n", yytext);
-}
+                               printf("Illegal character %s\n", yytext);
+                               return 0;
+                            }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 61 ".\\simple_lang.l"
+#line 85 ".\\simple_lang.l"
 ECHO;
 	YY_BREAK
-#line 731 "lex.yy.c"
+#line 742 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1613,25 +1624,22 @@ int main()
 	return 0;
 	}
 #endif
-#line 61 ".\\simple_lang.l"
+#line 85 ".\\simple_lang.l"
 
 
-static char *kid[N] = {
-    "if", "repeat", "read", "write", "then", "end", "else", "until"
+static char *keywords[N] = {
+    "if", "then", "else", "end", "repeat", "until", "read", "write"
 };
 
-// return 0 if s is not a keyword
+static int keyword_tokens[N] = {
+    IF, THEN, ELSE, END, REPEAT, UNTIL, READ, WRITE
+};
+
 int id_or_keyword(char *s) {
-    int i;
-    // loop through all keywords
-    for (i = 0; i < N; i++) {
-        if (strcmp(s, kid[i]) == 0) {
-            return i;   // return index of keyword
+    for (int i = 0; i < N; i++) {
+        if (strcmp(s, keywords[i]) == 0) {
+            return keyword_tokens[i];
         }
     }
-    return 0;
-}
-
-int main(void) {
-    yylex();
+    return 0; // ID
 }
