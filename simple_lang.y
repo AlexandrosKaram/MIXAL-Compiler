@@ -26,8 +26,15 @@ typedef struct Node {
 Node *createConstNode(int value);
 Node *createIdentNode(char *name);
 Node *createOpNode(int operator, Node *left, Node *right);
+Node *createIfNode(Node *condition, Node *thenBranch, Node *elseBranch);
+Node *createRepeatNode(Node *body, Node *condition);
+Node *createReadNode(char *name);
+Node *createWriteNode(Node *expr);
+void freeNode(Node *node);
 
-// Define yylval union
+// Error handling function
+void yyerror(const char *s);
+int yylex(void);
 %}
 
 %union {
@@ -47,16 +54,18 @@ Node *createOpNode(int operator, Node *left, Node *right);
 
 program:
     stmt_list { 
-        printf("Program parsed successfully!\n"); 
+        printf("Program parsed successfully!\n");
+        // Here you could execute or further process the syntax tree starting with $1
+        freeNode($1);
     }
     ;
 
 stmt_list:
     stmt { $$ = $1; }
-    | stmt_list stmt { 
+    | stmt_list ';' stmt { 
         Node *last = $1;
         while (last->next) last = last->next;
-        last->next = $2;
+        last->next = $3;
         $$ = $1;
     }
     ;
@@ -66,16 +75,19 @@ stmt:
         $$ = createOpNode(ASSIGN, createIdentNode($1), $3); 
     }
     | IF expr THEN stmt_list END {
-        // Create IF node here (not implemented in this example)
+        $$ = createIfNode($2, $4, NULL);
+    }
+    | IF expr THEN stmt_list ELSE stmt_list END {
+        $$ = createIfNode($2, $4, $6);
     }
     | REPEAT stmt_list UNTIL expr {
-        // Create REPEAT node here (not implemented in this example)
+        $$ = createRepeatNode($2, $4);
     }
     | READ ID { 
-        // Create READ node here (not implemented in this example)
+        $$ = createReadNode($2);
     }
     | WRITE expr {
-        // Create WRITE node here (not implemented in this example)
+        $$ = createWriteNode($2);
     }
     ;
 
@@ -93,12 +105,13 @@ term:
 
 factor:
     DEC_CONST { $$ = createConstNode(atoi(yytext)); }
-    | ID { $$ = createIdentNode(yytext); }
+    | ID { $$ = createIdentNode($1); }
     | '(' expr ')' { $$ = $2; }
     ;
 
 %%
 
+// Node creation functions
 Node *createConstNode(int value) {
     Node *node = (Node *) malloc(sizeof(Node));
     node->type = NodeType_Const;
@@ -125,9 +138,65 @@ Node *createOpNode(int operator, Node *left, Node *right) {
     return node;
 }
 
+Node *createIfNode(Node *condition, Node *thenBranch, Node *elseBranch) {
+    Node *node = (Node *) malloc(sizeof(Node));
+    node->type = NodeType_Stmt;
+    node->data.op.operator = IF;
+    node->data.op.left = condition;
+    node->data.op.right = thenBranch;
+    node->next = elseBranch;
+    return node;
+}
+
+Node *createRepeatNode(Node *body, Node *condition) {
+    Node *node = (Node *) malloc(sizeof(Node));
+    node->type = NodeType_Stmt;
+    node->data.op.operator = REPEAT;
+    node->data.op.left = body;
+    node->data.op.right = condition;
+    node->next = NULL;
+    return node;
+}
+
+Node *createReadNode(char *name) {
+    Node *node = (Node *) malloc(sizeof(Node));
+    node->type = NodeType_Stmt;
+    node->data.name = strdup(name);
+    node->next = NULL;
+    return node;
+}
+
+Node *createWriteNode(Node *expr) {
+    Node *node = (Node *) malloc(sizeof(Node));
+    node->type = NodeType_Stmt;
+    node->data.op.operator = WRITE;
+    node->data.op.left = expr;
+    node->next = NULL;
+    return node;
+}
+
+// Memory management for syntax tree
+void freeNode(Node *node) {
+    if (node == NULL) return;
+    
+    switch (node->type) {
+        case NodeType_Ident:
+            free(node->data.name);
+            break;
+        case NodeType_Op:
+        case NodeType_Stmt:
+            freeNode(node->data.op.left);
+            freeNode(node->data.op.right);
+            break;
+        default:
+            break;
+    }
+    free(node);
+}
+
 // Error handling function
 void yyerror(const char *s) {
-    fprintf(stderr, "Error: %s\n", s);
+    fprintf(stderr, "Error at line %d: %s\n", yylineno, s);
 }
 
 // Main function
