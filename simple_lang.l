@@ -16,58 +16,69 @@ int id_or_keyword(char *s);
 %%
 
 [0-9]+                       {
+                               printf("%s\n", yytext);
                                strcpy(yylval.ystr, yytext);
                                return DEC_CONST;
                             }
 
 "*"                           {
+                               printf("%s\n", yytext);
                                strcpy(yylval.ystr, yytext);
                                return '*';
                             }
 
 "/"                           {
+                               printf("%s\n", yytext);
                                strcpy(yylval.ystr, yytext);
                                return '/';
                             }
 
 "+"                           {
+                               printf("%s\n", yytext);
                                strcpy(yylval.ystr, yytext);
                                return '+';
                             }
 
 "-"                           {
+                               printf("%s\n", yytext);
                                strcpy(yylval.ystr, yytext);
                                return '-';
                             }
 
 "("                           {
+                               printf("%s\n", yytext);
                                strcpy(yylval.ystr, yytext);
                                return '(';
                             }
 
 ")"                           {
+                               printf("%s\n", yytext);
                                strcpy(yylval.ystr, yytext);
                                return ')';
                             }
 
 ";"                           {
+                               printf("%s\n", yytext);
                                strcpy(yylval.ystr, yytext);
                                return ';';
                             }
 
 ":="                          {
+                               printf("%s\n", yytext);
                                strcpy(yylval.ystr, yytext);
                                return ASSIGN;
                             }
 
 "<"                           {
+                               printf("%s\n", yytext);
                                strcpy(yylval.ystr, yytext);
-                               return '<';
+                               return LT;
                             }
 
 "="                           {
+                               printf("%s\n", yytext);
                                strcpy(yylval.ystr, yytext);
-                               return '=';
+                               return EQ;
                             }
 
 [a-zA-Z][a-zA-Z0-9]*          {
@@ -79,11 +90,13 @@ int id_or_keyword(char *s);
                                        insert(yytext, token_type);
                                        return token_type;
                                    } else {
+                                       printf("%s\n", yytext);
                                        strcpy(yylval.ystr, yytext);
                                        insert(yytext, ID);
                                        return ID;
                                    }
                                } else {
+                                   printf("%s\n", yytext);
                                    strcpy(yylval.ystr, yytext);
                                    return sym->token;
                                }
