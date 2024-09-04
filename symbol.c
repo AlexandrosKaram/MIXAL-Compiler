@@ -51,28 +51,29 @@ void printSymbolTable(Symbol *symbolTable) {
 }
 
 // Evaluate an expression in the AST using the symbol table
-int evaluateExpression(struct AstNode *node, Symbol *symbolTable) {
+int evaluateExpression(AstNode *node, Symbol *symbolTable) {
     if (node == NULL) return 0;
     switch (node->nodeType) {
-        case 'N': // Number
-            return atoi(node->value);
-        case 'I': { // Identifier
+        case CONST_NODE: // Constant
+            return atoi(node->value);  // Convert string constant to integer
+        case IDENT_NODE: { // Identifier
             Symbol *symbol = findSymbol(node->value, symbolTable);
-            return symbol ? symbol->value : 0;
+            return symbol ? symbol->value : 0;  // Return the value of the identifier
         }
-        case '+':
+        case PLUS_NODE:  // Addition
             return evaluateExpression(node->left, symbolTable) + evaluateExpression(node->right, symbolTable);
-        case '-':
+        case MINUS_NODE:  // Subtraction
             return evaluateExpression(node->left, symbolTable) - evaluateExpression(node->right, symbolTable);
-        case '*':
+        case MUL_NODE:  // Multiplication
             return evaluateExpression(node->left, symbolTable) * evaluateExpression(node->right, symbolTable);
-        case '/':
+        case DIV_NODE:  // Division
             return evaluateExpression(node->left, symbolTable) / evaluateExpression(node->right, symbolTable);
-        case '<':
+        case LT_NODE:  // Less than comparison
             return evaluateExpression(node->left, symbolTable) < evaluateExpression(node->right, symbolTable);
-        case '=':
+        case EQ_NODE:  // Equality comparison
             return evaluateExpression(node->left, symbolTable) == evaluateExpression(node->right, symbolTable);
         default:
             return 0;
     }
 }
+

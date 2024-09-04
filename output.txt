@@ -1,23 +1,24 @@
 Syntax Tree:
-;
-  ;
-    ;
-      =
-        I (x)
-        N (4)
-      =
-        I (fact)
-        N (10)
-    I
-      <
-        N (30)
-        I (x)
-      =
-        I (fact)
-        N (6)
-  W (fact)
+SEQ
+  SEQ
+    SEQ
+      ASSIGN
+        IDENT (x)
+        CONST (4)
+      ASSIGN
+        IDENT (fact)
+        CONST (10)
+    IF
+      LT
+        IDENT (x)
+        CONST (30)
+      ASSIGN
+        IDENT (fact)
+        CONST (6)
+  WRITE (fact)
 
 Executing program:
 Assigned 4 to x
 Assigned 10 to fact
-Value of fact: 10
+Assigned 6 to fact
+Value of fact: 6

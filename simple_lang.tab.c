@@ -1391,7 +1391,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 41 "simple_lang.y"
-    { (yyval.node) = createNode(';', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
+    { (yyval.node) = createNode(SEQ_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 4:
@@ -1406,7 +1406,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 54 "simple_lang.y"
     {
-        (yyval.node) = createNode('=', createNode('I', NULL, NULL, (yyvsp[(1) - (3)].ystr)), (yyvsp[(3) - (3)].node), NULL); 
+        (yyval.node) = createNode(ASSIGN_NODE, createNode(IDENT_NODE, NULL, NULL, (yyvsp[(1) - (3)].ystr)), (yyvsp[(3) - (3)].node), NULL); 
     ;}
     break;
 
@@ -1415,7 +1415,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 60 "simple_lang.y"
     { 
-        (yyval.node) = createNode('I', (yyvsp[(2) - (5)].node), (yyvsp[(4) - (5)].node), NULL); 
+        (yyval.node) = createNode(IF_NODE, (yyvsp[(2) - (5)].node), (yyvsp[(4) - (5)].node), NULL); 
     ;}
     break;
 
@@ -1424,7 +1424,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 63 "simple_lang.y"
     { 
-        (yyval.node) = createNode('I', (yyvsp[(2) - (7)].node), createNode('E', (yyvsp[(4) - (7)].node), (yyvsp[(6) - (7)].node), NULL), NULL); 
+        (yyval.node) = createNode(IF_NODE, (yyvsp[(2) - (7)].node), createNode(SEQ_NODE, (yyvsp[(4) - (7)].node), (yyvsp[(6) - (7)].node), NULL), NULL); 
     ;}
     break;
 
@@ -1432,7 +1432,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 69 "simple_lang.y"
-    { (yyval.node) = createNode('R', (yyvsp[(2) - (4)].node), (yyvsp[(4) - (4)].node), NULL); ;}
+    { (yyval.node) = createNode(REPEAT_NODE, (yyvsp[(2) - (4)].node), (yyvsp[(4) - (4)].node), NULL); ;}
     break;
 
   case 14:
@@ -1440,7 +1440,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 73 "simple_lang.y"
     {
-        (yyval.node) = createNode('L', NULL, NULL, strdup((yyvsp[(2) - (2)].ystr))); 
+        (yyval.node) = createNode(READ_NODE, NULL, NULL, strdup((yyvsp[(2) - (2)].ystr))); 
     ;}
     break;
 
@@ -1449,7 +1449,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 79 "simple_lang.y"
     {
-        (yyval.node) = createNode('W', NULL, NULL, strdup((yyvsp[(2) - (2)].ystr))); 
+        (yyval.node) = createNode(WRITE_NODE, NULL, NULL, strdup((yyvsp[(2) - (2)].ystr))); 
     ;}
     break;
 
@@ -1464,42 +1464,42 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 90 "simple_lang.y"
-    { (yyval.node) = createNode('<', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
+    { (yyval.node) = createNode(LT_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
 #line 91 "simple_lang.y"
-    { (yyval.node) = createNode('=', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
+    { (yyval.node) = createNode(EQ_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
 #line 96 "simple_lang.y"
-    { (yyval.node) = createNode('+', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
+    { (yyval.node) = createNode(PLUS_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
 #line 97 "simple_lang.y"
-    { (yyval.node) = createNode('-', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
+    { (yyval.node) = createNode(MINUS_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
 #line 102 "simple_lang.y"
-    { (yyval.node) = createNode('*', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
+    { (yyval.node) = createNode(MUL_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
 #line 103 "simple_lang.y"
-    { (yyval.node) = createNode('/', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
+    { (yyval.node) = createNode(DIV_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 26:
@@ -1509,7 +1509,7 @@ yyreduce:
     { 
         char buffer[100];
         snprintf(buffer, sizeof(buffer), "%d", (yyvsp[(1) - (1)].yint));
-        (yyval.node) = createNode('N', NULL, NULL, strdup(buffer)); 
+        (yyval.node) = createNode(CONST_NODE, NULL, NULL, strdup(buffer)); 
     ;}
     break;
 
@@ -1518,7 +1518,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 112 "simple_lang.y"
     {
-        (yyval.node) = createNode('I', NULL, NULL, strdup((yyvsp[(1) - (1)].ystr)));
+        (yyval.node) = createNode(IDENT_NODE, NULL, NULL, strdup((yyvsp[(1) - (1)].ystr)));
     ;}
     break;
 
@@ -1755,63 +1755,64 @@ void executeNode(AstNode *node) {
     if (node == NULL) return;
 
     switch (node->nodeType) {
-        case 'I': { // If statement
+        case IF_NODE: { // If statement
             int cond = evaluateExpression(node->left, symbolTable);
             if (cond) {
                 executeNode(node->right); // Execute THEN block
-            } else if (node->right && node->right->nodeType == 'E') {
+            } else if (node->right && node->right->nodeType == SEQ_NODE) {
                 executeNode(node->right->right); // Execute ELSE block if exists
             }
             break;
         }
-        case '=': { // Assignment
-            if (findSymbol(node->left->value, symbolTable) == NULL) {
-                declareVariable(node->left->value, &symbolTable); 
-            }
+        case ASSIGN_NODE: { // Assignment
             Symbol *symbol = findSymbol(node->left->value, symbolTable);
+            if (symbol == NULL) {
+                declareVariable(node->left->value, &symbolTable);  // Declare if not found
+                symbol = findSymbol(node->left->value, symbolTable);  // Retrieve the symbol after declaration
+            }
             if (symbol != NULL) {
-                symbol->value = evaluateExpression(node->right, symbolTable);
+                symbol->value = evaluateExpression(node->right, symbolTable);  // Assign evaluated expression
                 fprintf(outputFile, "Assigned %d to %s\n", symbol->value, node->left->value);
             }
             break;
         }
-        case 'R': { // Repeat statement
+        case REPEAT_NODE: { // Repeat statement
             do {
                 executeNode(node->left); // Execute block
             } while (!evaluateExpression(node->right, symbolTable)); 
             break;
         }
-        case 'L': { // Read statement
-            if (findSymbol(node->value, symbolTable) == NULL) {
-                declareVariable(node->value, &symbolTable);
+        case READ_NODE: { // Read statement
+            Symbol *symbol = findSymbol(node->value, symbolTable);
+            if (symbol == NULL) {
+                declareVariable(node->value, &symbolTable);  // Declare if not found
+                symbol = findSymbol(node->value, symbolTable);  // Retrieve the symbol after declaration
             }
             fprintf(outputFile, "Reading value for %s\n", node->value);
             break;
         }
-        case 'W': { // Write statement
-            if (findSymbol(node->value, symbolTable) == NULL) {
+        case WRITE_NODE: { // Write statement
+            Symbol *symbol = findSymbol(node->value, symbolTable);
+            if (symbol == NULL) {
                 fprintf(stderr, "Semantic Error: Undeclared variable %s\n", node->value);
                 exit(1);
             }
-            Symbol *symbol = findSymbol(node->value, symbolTable);
-            if (symbol != NULL) {
-                fprintf(outputFile, "Value of %s: %d\n", node->value, symbol->value);
-            }
+            fprintf(outputFile, "Value of %s: %d\n", node->value, symbol->value);
             break;
         }
-        case ';': { // Sequence of statements
+        case SEQ_NODE: { // Sequence of statements
             executeNode(node->left);
             executeNode(node->right);
             break;
         }
         default:
-            fprintf(outputFile, "Unknown node type: %c\n", node->nodeType);
+            fprintf(outputFile, "Unknown node type: %d\n", node->nodeType);
             break;
     }
 }
 
+
 int main() {
-    // Open a file for writing (output.txt in the same directory)
     outputFile = fopen("output.txt", "w");
     if (outputFile == NULL) {
         fprintf(stderr, "Error opening file for writing\n");
