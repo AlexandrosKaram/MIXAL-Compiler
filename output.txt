@@ -1,0 +1,23 @@
+Syntax Tree:
+;
+  ;
+    ;
+      =
+        I (x)
+        N (4)
+      =
+        I (fact)
+        N (10)
+    I
+      <
+        N (30)
+        I (x)
+      =
+        I (fact)
+        N (6)
+  W (fact)
+
+Executing program:
+Assigned 4 to x
+Assigned 10 to fact
+Value of fact: 10

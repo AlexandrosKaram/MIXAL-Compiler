@@ -8,6 +8,8 @@
     Symbol *symbolTable = NULL;
     struct AstNode *root = NULL;
 
+    FILE *outputFile;  // Declare the file pointer globally or in main
+
     void yyerror(const char *s);
     int yylex(void);
     void executeNode(struct AstNode *node);
@@ -139,7 +141,7 @@ void executeNode(AstNode *node) {
             Symbol *symbol = findSymbol(node->left->value, symbolTable);
             if (symbol != NULL) {
                 symbol->value = evaluateExpression(node->right, symbolTable);
-                printf("Assigned %d to %s\n", symbol->value, node->left->value);
+                fprintf(outputFile, "Assigned %d to %s\n", symbol->value, node->left->value);
             }
             break;
         }
@@ -153,7 +155,7 @@ void executeNode(AstNode *node) {
             if (findSymbol(node->value, symbolTable) == NULL) {
                 declareVariable(node->value, &symbolTable);
             }
-            printf("Reading value for %s\n", node->value);
+            fprintf(outputFile, "Reading value for %s\n", node->value);
             break;
         }
         case 'W': { // Write statement
@@ -163,7 +165,7 @@ void executeNode(AstNode *node) {
             }
             Symbol *symbol = findSymbol(node->value, symbolTable);
             if (symbol != NULL) {
-                printf("Value of %s: %d\n", node->value, symbol->value);
+                fprintf(outputFile, "Value of %s: %d\n", node->value, symbol->value);
             }
             break;
         }
@@ -173,17 +175,27 @@ void executeNode(AstNode *node) {
             break;
         }
         default:
-            printf("Unknown node type: %c\n", node->nodeType);
+            fprintf(outputFile, "Unknown node type: %c\n", node->nodeType);
             break;
     }
 }
 
 int main() {
+    // Open a file for writing (output.txt in the same directory)
+    outputFile = fopen("output.txt", "w");
+    if (outputFile == NULL) {
+        fprintf(stderr, "Error opening file for writing\n");
+        return 1;
+    }
+
     yyparse(); 
-    printf("Syntax Tree:\n");
-    printTree(root, 0);
-    printf("\nExecuting program:\n");
+
+    fprintf(outputFile, "Syntax Tree:\n");
+    printTree(root, 0, outputFile);  // Pass the file pointer to this function
+    fprintf(outputFile, "\nExecuting program:\n");
     executeNode(root);
     printSymbolTable(symbolTable); 
+
+    fclose(outputFile);  // Close the file when done
     return 0;
 }
