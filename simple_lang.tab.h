@@ -39,18 +39,18 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     ID = 258,
-     DEC_CONST = 259,
+     DEC_CONST = 258,
+     ID = 259,
      IF = 260,
      THEN = 261,
      ELSE = 262,
-     END = 263,
-     REPEAT = 264,
-     UNTIL = 265,
-     READ = 266,
-     WRITE = 267,
-     ASSIGN = 268,
-     EQ = 269,
+     WRITE = 263,
+     READ = 264,
+     REPEAT = 265,
+     UNTIL = 266,
+     END = 267,
+     EQ = 268,
+     ASSIGN = 269,
      LT = 270
    };
 #endif
@@ -62,11 +62,11 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 59 "simple_lang.y"
+#line 16 "simple_lang.y"
 
-    int yint;     // Integer values for constants
-    char ystr[100];   // String values for identifiers
-    struct Node *node;   // Node pointer for syntax tree nodes
+  int yint;
+  char ystr[100];
+  struct AstNode *node;
 
 
 
