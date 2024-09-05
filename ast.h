@@ -2,7 +2,7 @@
 #define AST_H
 
 #include <stdlib.h>
-#include <stdio.h>  // For FILE pointer
+#include <stdio.h>
 
 // Define the types of AST nodes as an enum for readability
 typedef enum {
@@ -19,7 +19,7 @@ typedef enum {
     DIV_NODE,
     LT_NODE,
     EQ_NODE,
-    SEQ_NODE  // Sequence of statements (';')
+    SEQ_NODE
 } NodeType;
 
 // Representation of an Abstract Syntax Tree (AST) node

@@ -1,24 +1,16 @@
 Syntax Tree:
 SEQ
-  SEQ
+  READ (x)
+  IF
+    LT
+      CONST (10)
+      IDENT (x)
     SEQ
       ASSIGN
-        IDENT (x)
-        CONST (4)
-      ASSIGN
-        IDENT (fact)
-        CONST (10)
-    IF
-      LT
-        IDENT (x)
-        CONST (30)
-      ASSIGN
-        IDENT (fact)
-        CONST (6)
-  WRITE (fact)
+        IDENT (y)
+        CONST (50)
+      WRITE (y)
 
-Executing program:
-Assigned 4 to x
-Assigned 10 to fact
-Assigned 6 to fact
-Value of fact: 6
+Symbol Table:
+===============
+The symbol table is empty.

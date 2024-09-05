@@ -1,0 +1,9 @@
+read x;
+read y;
+z := x + y;
+write z;
+if z > 10 then
+    write "Greater than 10"
+else
+    write "Less than or equal to 10"
+end

@@ -12,7 +12,7 @@
 
     void yyerror(const char *s);
     int yylex(void);
-    void executeNode(struct AstNode *node);
+    void executeNode(struct AstNode *node);  // Execute the AST
 %}
 
 %union {
@@ -21,27 +21,33 @@
   struct AstNode *node;
 }
 
+// Represent Decimal Constants
 %token <yint> DEC_CONST
+// Represent Identifiers
 %token <ystr> ID
+// Represent Keywords
 %token IF THEN ELSE WRITE READ REPEAT UNTIL END
-%token EQ
-%token ASSIGN LT
-%token <ystr> '(' ')' ';'
-%token <ystr> '+' '-' '*' '/'
+// Represent Operators
+%token ASSIGN LT EQ
+%token <ystr> '(' ')' ';' '+' '-' '*' '/'
 
+// Non-terminals
 %type <node> program stmt_seq stmt assign_stmt if_stmt repeat_stmt read_stmt write_stmt exp simple_exp term factor rel_exp
 
 %%
 
+// Initialization of the program
 program:
     stmt_seq { root = $1; }  // Store root of AST in global variable
     ;
 
+// Statement sequence
 stmt_seq:
     stmt_seq ';' stmt { $$ = createNode(SEQ_NODE, $1, $3, NULL); }
     | stmt { $$ = $1; }
     ;
 
+// Statement
 stmt:
     assign_stmt
     | if_stmt
@@ -50,12 +56,14 @@ stmt:
     | write_stmt
     ;
 
+// Assignment statement
 assign_stmt:
     ID ASSIGN exp {
         $$ = createNode(ASSIGN_NODE, createNode(IDENT_NODE, NULL, NULL, $1), $3, NULL); 
     }
     ;
 
+// If statement
 if_stmt:
     IF exp THEN stmt_seq END { 
         $$ = createNode(IF_NODE, $2, $4, NULL); 
@@ -65,44 +73,52 @@ if_stmt:
     }
     ;
 
+// Repeat statement
 repeat_stmt:
     REPEAT stmt_seq UNTIL exp { $$ = createNode(REPEAT_NODE, $2, $4, NULL); }
     ;
 
+// Input statement
 read_stmt:
     READ ID {
         $$ = createNode(READ_NODE, NULL, NULL, strdup($2)); 
     }
     ;
 
+// Output statement
 write_stmt:
     WRITE ID {
         $$ = createNode(WRITE_NODE, NULL, NULL, strdup($2)); 
     }
     ;
 
+// Expression
 exp:
     rel_exp { $$ = $1; }
     ;
 
+// Relational expression
 rel_exp:
     simple_exp
     | simple_exp LT simple_exp { $$ = createNode(LT_NODE, $1, $3, NULL); }
     | simple_exp EQ simple_exp { $$ = createNode(EQ_NODE, $1, $3, NULL); }
     ;
 
+// Simple expression
 simple_exp:
     term
     | simple_exp '+' term { $$ = createNode(PLUS_NODE, $1, $3, NULL); }
     | simple_exp '-' term { $$ = createNode(MINUS_NODE, $1, $3, NULL); }
     ;
 
+// Term
 term:
     factor
     | term '*' factor { $$ = createNode(MUL_NODE, $1, $3, NULL); }
     | term '/' factor { $$ = createNode(DIV_NODE, $1, $3, NULL); }
     ;
 
+// Factor
 factor:
     DEC_CONST { 
         char buffer[100];
@@ -117,70 +133,50 @@ factor:
 
 %%
 
+// Custom function to handle errors
 void yyerror(const char *s) {
     fprintf(stderr, "Error: %s\n", s);
 }
 
+// Function to execute the AST and update the symbol table
 void executeNode(AstNode *node) {
     if (node == NULL) return;
 
     switch (node->nodeType) {
-        case IF_NODE: { // If statement
-            int cond = evaluateExpression(node->left, symbolTable);
-            if (cond) {
-                executeNode(node->right); // Execute THEN block
-            } else if (node->right && node->right->nodeType == SEQ_NODE) {
-                executeNode(node->right->right); // Execute ELSE block if exists
-            }
-            break;
-        }
-        case ASSIGN_NODE: { // Assignment
+        case ASSIGN_NODE: { // Handle assignments
             Symbol *symbol = findSymbol(node->left->value, symbolTable);
             if (symbol == NULL) {
-                declareVariable(node->left->value, &symbolTable);  // Declare if not found
-                symbol = findSymbol(node->left->value, symbolTable);  // Retrieve the symbol after declaration
+                declareVariable(node->left->value, &symbolTable);  // Declare the variable if not found
+                symbol = findSymbol(node->left->value, symbolTable);
             }
             if (symbol != NULL) {
-                symbol->value = evaluateExpression(node->right, symbolTable);  // Assign evaluated expression
-                fprintf(outputFile, "Assigned %d to %s\n", symbol->value, node->left->value);
+                symbol->value = evaluateExpression(node->right, symbolTable);  // Evaluate the right-hand side and assign the value
             }
             break;
         }
-        case REPEAT_NODE: { // Repeat statement
-            do {
-                executeNode(node->left); // Execute block
-            } while (!evaluateExpression(node->right, symbolTable)); 
+        case IF_NODE: { // Handle if statements
+            int condition = evaluateExpression(node->left, symbolTable);  // Evaluate condition
+            if (condition) {
+                executeNode(node->right);  // Execute THEN branch
+            }
             break;
         }
-        case READ_NODE: { // Read statement
+        case WRITE_NODE: { // Handle write statement
             Symbol *symbol = findSymbol(node->value, symbolTable);
-            if (symbol == NULL) {
-                declareVariable(node->value, &symbolTable);  // Declare if not found
-                symbol = findSymbol(node->value, symbolTable);  // Retrieve the symbol after declaration
+            if (symbol != NULL) {
+                /* fprintf(outputFile, "Value of %s: %d\n", node->value, symbol->value);  // Write the value of the variable to the output file */
             }
-            fprintf(outputFile, "Reading value for %s\n", node->value);
             break;
         }
-        case WRITE_NODE: { // Write statement
-            Symbol *symbol = findSymbol(node->value, symbolTable);
-            if (symbol == NULL) {
-                fprintf(stderr, "Semantic Error: Undeclared variable %s\n", node->value);
-                exit(1);
-            }
-            fprintf(outputFile, "Value of %s: %d\n", node->value, symbol->value);
-            break;
-        }
-        case SEQ_NODE: { // Sequence of statements
+        case SEQ_NODE: { // Handle sequence of statements
             executeNode(node->left);
             executeNode(node->right);
             break;
         }
         default:
-            fprintf(outputFile, "Unknown node type: %d\n", node->nodeType);
             break;
     }
 }
-
 
 int main() {
     outputFile = fopen("output.txt", "w");
@@ -189,13 +185,16 @@ int main() {
         return 1;
     }
 
-    yyparse(); 
+    yyparse();  // Parse the input program and build the AST
 
     fprintf(outputFile, "Syntax Tree:\n");
-    printTree(root, 0, outputFile);  // Pass the file pointer to this function
-    fprintf(outputFile, "\nExecuting program:\n");
+    printTree(root, 0, outputFile);  // Print the syntax tree to the output file
+
+    // Execute the AST to populate the symbol table and perform write operations
     executeNode(root);
-    printSymbolTable(symbolTable); 
+
+    // Now print the symbol table after execution
+    printSymbolTable(symbolTable, outputFile);
 
     fclose(outputFile);  // Close the file when done
     return 0;

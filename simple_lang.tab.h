@@ -49,9 +49,9 @@
      REPEAT = 265,
      UNTIL = 266,
      END = 267,
-     EQ = 268,
-     ASSIGN = 269,
-     LT = 270
+     ASSIGN = 268,
+     LT = 269,
+     EQ = 270
    };
 #endif
 

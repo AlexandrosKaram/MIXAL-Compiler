@@ -38,15 +38,22 @@ void declareVariable(char *name, Symbol **symbolTable) {
     }
 }
 
-// Print the symbol table
-void printSymbolTable(Symbol *symbolTable) {
+// Print the symbol table in a new format to the output file
+void printSymbolTable(Symbol *symbolTable, FILE *outputFile) {
     Symbol *current = symbolTable;
-    printf("Symbol Table:\n");
-    printf("Name\tValue\n");
-    printf("----\t-----\n");
+    fprintf(outputFile, "\nSymbol Table:\n");
+    fprintf(outputFile, "===============\n");
+    int count = 1;
     while (current != NULL) {
-        printf("%s\t%d\n", current->name, current->value);
+        fprintf(outputFile, "Symbol %d:\n", count);
+        fprintf(outputFile, "  Name  : %s\n", current->name);
+        fprintf(outputFile, "  Value : %d\n", current->value);
+        fprintf(outputFile, "---------------\n");
         current = current->next;
+        count++;
+    }
+    if (count == 1) {
+        fprintf(outputFile, "The symbol table is empty.\n");
     }
 }
 

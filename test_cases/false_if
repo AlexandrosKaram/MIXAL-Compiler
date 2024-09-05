@@ -1,0 +1,5 @@
+read x;
+if 10 < x then
+    y := 50;
+    write y
+end

@@ -15,7 +15,7 @@ typedef struct Symbol {
 Symbol *createSymbol(char *name, int value);
 void insertSymbol(char *name, int value, Symbol **symbolTable);
 Symbol *findSymbol(char *name, Symbol *symbolTable);
-void printSymbolTable(Symbol *symbolTable);
+void printSymbolTable(Symbol *symbolTable, FILE *outputFile);
 void declareVariable(char *name, Symbol **symbolTable);
 int evaluateExpression(AstNode *node, Symbol *symbolTable);
 
