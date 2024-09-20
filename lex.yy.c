@@ -394,9 +394,9 @@ static char *yy_last_accepting_cpos;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "simple_lang.l"
+#line 1 ".\\simple_lang.l"
 #define INITIAL 0
-#line 2 "simple_lang.l"
+#line 2 ".\\simple_lang.l"
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
@@ -554,7 +554,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 10 "simple_lang.l"
+#line 10 ".\\simple_lang.l"
 
 
 #line 561 "lex.yy.c"
@@ -642,7 +642,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 12 "simple_lang.l"
+#line 12 ".\\simple_lang.l"
 {
                         printf("%s \n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -651,7 +651,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 17 "simple_lang.l"
+#line 17 ".\\simple_lang.l"
 {
                         printf("%s \n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -660,7 +660,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 22 "simple_lang.l"
+#line 22 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -669,7 +669,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 27 "simple_lang.l"
+#line 27 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -678,7 +678,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 32 "simple_lang.l"
+#line 32 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -687,7 +687,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 37 "simple_lang.l"
+#line 37 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -696,7 +696,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 42 "simple_lang.l"
+#line 42 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -705,7 +705,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 47 "simple_lang.l"
+#line 47 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -714,7 +714,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 53 "simple_lang.l"
+#line 53 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         yylval.yint = atoi(yytext);
@@ -723,7 +723,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 58 "simple_lang.l"
+#line 58 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -732,7 +732,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 63 "simple_lang.l"
+#line 63 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -741,7 +741,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 68 "simple_lang.l"
+#line 68 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -750,7 +750,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 73 "simple_lang.l"
+#line 73 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -759,7 +759,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 78 "simple_lang.l"
+#line 78 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -768,7 +768,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 83 "simple_lang.l"
+#line 83 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -777,7 +777,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 88 "simple_lang.l"
+#line 88 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -786,7 +786,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 93 "simple_lang.l"
+#line 93 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -795,7 +795,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 98 "simple_lang.l"
+#line 98 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -804,7 +804,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 103 "simple_lang.l"
+#line 103 ".\\simple_lang.l"
 {
                         printf("%s\n", yytext);
                         strcpy(yylval.ystr, yytext);
@@ -813,7 +813,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 108 "simple_lang.l"
+#line 108 ".\\simple_lang.l"
 {
                         printf("id : %s\n", yytext);
                         strcpy(yylval.ystr,yytext);
@@ -822,17 +822,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 113 "simple_lang.l"
+#line 113 ".\\simple_lang.l"
 { /* αγνόησε λευκούς χαρακτήρες */ }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 114 "simple_lang.l"
+#line 114 ".\\simple_lang.l"
 { printf("Unknown Character %s\n", yytext); }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 116 "simple_lang.l"
+#line 116 ".\\simple_lang.l"
 ECHO;
 	YY_BREAK
 #line 839 "lex.yy.c"
@@ -1721,5 +1721,5 @@ int main()
 	return 0;
 	}
 #endif
-#line 116 "simple_lang.l"
+#line 116 ".\\simple_lang.l"
 

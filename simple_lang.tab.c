@@ -68,7 +68,7 @@
 /* Copy the first part of user declarations.  */
 
 /* Line 189 of yacc.c  */
-#line 1 "simple_lang.y"
+#line 1 ".\\simple_lang.y"
 
     #include <stdio.h>
     #include <stdlib.h>
@@ -137,7 +137,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 18 "simple_lang.y"
+#line 18 ".\\simple_lang.y"
 
   int yint;
   char ystr[100];
@@ -1383,28 +1383,28 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 41 "simple_lang.y"
+#line 41 ".\\simple_lang.y"
     { root = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 3:
 
 /* Line 1455 of yacc.c  */
-#line 46 "simple_lang.y"
+#line 46 ".\\simple_lang.y"
     { (yyval.node) = createNode(SEQ_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 47 "simple_lang.y"
+#line 47 ".\\simple_lang.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 61 "simple_lang.y"
+#line 61 ".\\simple_lang.y"
     {
         (yyval.node) = createNode(ASSIGN_NODE, createNode(IDENT_NODE, NULL, NULL, (yyvsp[(1) - (3)].ystr)), (yyvsp[(3) - (3)].node), NULL); 
     ;}
@@ -1413,7 +1413,7 @@ yyreduce:
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 68 "simple_lang.y"
+#line 68 ".\\simple_lang.y"
     { 
         (yyval.node) = createNode(IF_NODE, (yyvsp[(2) - (5)].node), (yyvsp[(4) - (5)].node), NULL); 
     ;}
@@ -1422,23 +1422,23 @@ yyreduce:
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 71 "simple_lang.y"
+#line 71 ".\\simple_lang.y"
     { 
-        (yyval.node) = createNode(IF_NODE, (yyvsp[(2) - (7)].node), createNode(SEQ_NODE, (yyvsp[(4) - (7)].node), (yyvsp[(6) - (7)].node), NULL), NULL); 
+        (yyval.node) = createNode(IF_NODE, (yyvsp[(2) - (7)].node), createNode(ELSE_NODE, (yyvsp[(4) - (7)].node), (yyvsp[(6) - (7)].node), NULL), NULL); 
     ;}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 78 "simple_lang.y"
+#line 78 ".\\simple_lang.y"
     { (yyval.node) = createNode(REPEAT_NODE, (yyvsp[(2) - (4)].node), (yyvsp[(4) - (4)].node), NULL); ;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 83 "simple_lang.y"
+#line 83 ".\\simple_lang.y"
     {
         (yyval.node) = createNode(READ_NODE, NULL, NULL, strdup((yyvsp[(2) - (2)].ystr))); 
     ;}
@@ -1447,7 +1447,7 @@ yyreduce:
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 90 "simple_lang.y"
+#line 90 ".\\simple_lang.y"
     {
         (yyval.node) = createNode(WRITE_NODE, NULL, NULL, strdup((yyvsp[(2) - (2)].ystr))); 
     ;}
@@ -1456,56 +1456,56 @@ yyreduce:
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 97 "simple_lang.y"
+#line 97 ".\\simple_lang.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 103 "simple_lang.y"
+#line 103 ".\\simple_lang.y"
     { (yyval.node) = createNode(LT_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 104 "simple_lang.y"
+#line 104 ".\\simple_lang.y"
     { (yyval.node) = createNode(EQ_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 110 "simple_lang.y"
+#line 110 ".\\simple_lang.y"
     { (yyval.node) = createNode(PLUS_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 111 "simple_lang.y"
+#line 111 ".\\simple_lang.y"
     { (yyval.node) = createNode(MINUS_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 117 "simple_lang.y"
+#line 117 ".\\simple_lang.y"
     { (yyval.node) = createNode(MUL_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 118 "simple_lang.y"
+#line 118 ".\\simple_lang.y"
     { (yyval.node) = createNode(DIV_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 123 "simple_lang.y"
+#line 123 ".\\simple_lang.y"
     { 
         char buffer[100];
         snprintf(buffer, sizeof(buffer), "%d", (yyvsp[(1) - (1)].yint));
@@ -1516,7 +1516,7 @@ yyreduce:
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 128 "simple_lang.y"
+#line 128 ".\\simple_lang.y"
     {
         (yyval.node) = createNode(IDENT_NODE, NULL, NULL, strdup((yyvsp[(1) - (1)].ystr)));
     ;}
@@ -1525,7 +1525,7 @@ yyreduce:
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 131 "simple_lang.y"
+#line 131 ".\\simple_lang.y"
     { (yyval.node) = (yyvsp[(2) - (3)].node); ;}
     break;
 
@@ -1744,7 +1744,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 134 "simple_lang.y"
+#line 134 ".\\simple_lang.y"
 
 
 // Custom function to handle errors
@@ -1768,10 +1768,21 @@ void executeNode(AstNode *node) {
             }
             break;
         }
-        case IF_NODE: { // Handle if statements
+        case IF_NODE: {
             int condition = evaluateExpression(node->left, symbolTable);  // Evaluate condition
-            if (condition) {
-                executeNode(node->right);  // Execute THEN branch
+            if (node->right && node->right->nodeType == ELSE_NODE) {
+                // If there is an ELSE_NODE
+                if (condition) {
+                    executeNode(node->right->left);  // Execute THEN branch (node->right->left)
+                } else {
+                    executeNode(node->right->right);  // Execute ELSE branch (node->right->right)
+                }
+            } else {
+                // No ELSE_NODE, only THEN branch exists
+                if (condition) {
+                    executeNode(node->right);  // Execute THEN branch
+                }
+                // If condition is false and no ELSE, do nothing
             }
             break;
         }
@@ -1788,6 +1799,7 @@ void executeNode(AstNode *node) {
             break;
         }
         default:
+            printf("Unknown node type.\n");
             break;
     }
 }

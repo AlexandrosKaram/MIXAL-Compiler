@@ -69,7 +69,7 @@ if_stmt:
         $$ = createNode(IF_NODE, $2, $4, NULL); 
     }
     | IF exp THEN stmt_seq ELSE stmt_seq END { 
-        $$ = createNode(IF_NODE, $2, createNode(SEQ_NODE, $4, $6, NULL), NULL); 
+        $$ = createNode(IF_NODE, $2, createNode(ELSE_NODE, $4, $6, NULL), NULL); 
     }
     ;
 
@@ -154,10 +154,21 @@ void executeNode(AstNode *node) {
             }
             break;
         }
-        case IF_NODE: { // Handle if statements
+        case IF_NODE: {
             int condition = evaluateExpression(node->left, symbolTable);  // Evaluate condition
-            if (condition) {
-                executeNode(node->right);  // Execute THEN branch
+            if (node->right && node->right->nodeType == ELSE_NODE) {
+                // If there is an ELSE_NODE
+                if (condition) {
+                    executeNode(node->right->left);  // Execute THEN branch (node->right->left)
+                } else {
+                    executeNode(node->right->right);  // Execute ELSE branch (node->right->right)
+                }
+            } else {
+                // No ELSE_NODE, only THEN branch exists
+                if (condition) {
+                    executeNode(node->right);  // Execute THEN branch
+                }
+                // If condition is false and no ELSE, do nothing
             }
             break;
         }
@@ -174,6 +185,7 @@ void executeNode(AstNode *node) {
             break;
         }
         default:
+            printf("Unknown node type.\n");
             break;
     }
 }

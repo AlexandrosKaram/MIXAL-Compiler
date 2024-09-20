@@ -1,16 +1,23 @@
 Syntax Tree:
 SEQ
-  READ (x)
+  ASSIGN
+    IDENT (x)
+    CONST (1)
   IF
     LT
-      CONST (10)
       IDENT (x)
-    SEQ
+      CONST (5)
+    ELSE
       ASSIGN
-        IDENT (y)
-        CONST (50)
-      WRITE (y)
+        IDENT (x)
+        CONST (2)
+      ASSIGN
+        IDENT (x)
+        CONST (3)
 
 Symbol Table:
 ===============
-The symbol table is empty.
+Symbol 1:
+  Name  : x
+  Value : 2
+---------------

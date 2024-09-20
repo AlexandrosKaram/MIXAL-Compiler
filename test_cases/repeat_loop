@@ -1,7 +1,0 @@
-read x;
-y := 1;
-repeat
-    y := y * x;
-    x := x - 1
-until x = 0;
-write y
