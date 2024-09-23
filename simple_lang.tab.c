@@ -1772,6 +1772,7 @@ void executeNode(AstNode *node) {
             Symbol *symbol = findSymbol(node->left->value, symbolTable);
             if (symbol != NULL) {
                 symbol->value = evaluateExpression(node->right, symbolTable);
+                printf("Assigned %d to %s\n", symbol->value, node->left->value);
             }
             break;
         }
@@ -1795,6 +1796,7 @@ void executeNode(AstNode *node) {
                 declareVariable(node->value, &symbolTable);
             }
             Symbol *symbol = findSymbol(node->value, symbolTable);
+            printf("Read value for %s\n", node->value);
             break;
         }
         case WRITE_NODE: { // Handle write statement
@@ -1827,7 +1829,7 @@ int main() {
         return 1;
     }
 
-    yyparse();  // Parse the input program and build the AST
+    yyparse();
 
     fprintf(outputFile, "Syntax Tree:\n");
     printTree(root, 0, outputFile);  // Print the syntax tree to the output file
@@ -1844,7 +1846,7 @@ int main() {
     fclose(assemblyFile);  // Close the assembly file
 
     // Now print the symbol table after execution
-    printSymbolTable(symbolTable, outputFile);
+    /* printSymbolTable(symbolTable, outputFile); */
 
     fclose(outputFile);     // Close the output file
     fclose(assemblyFile);   // Close the assembly file

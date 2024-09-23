@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include "ast.h"
 
-extern Symbol *symbolTable;
 
 // Representation of a symbol
 typedef struct Symbol {
@@ -13,6 +12,8 @@ typedef struct Symbol {
     int memoryLocation;
     struct Symbol *next;
 } Symbol;
+
+extern Symbol *symbolTable;
 
 // Declarations
 Symbol *createSymbol(char *name, int value);
