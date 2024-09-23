@@ -4,11 +4,13 @@
     #include <string.h>
     #include "ast.h"  
     #include "symbol.h"
+    #include "assembly_gen.h"
 
     Symbol *symbolTable = NULL;
     struct AstNode *root = NULL;
 
-    FILE *outputFile;  // Declare the file pointer globally or in main
+    FILE *outputFile;
+    FILE *assemblyFile;
 
     void yyerror(const char *s);
     int yylex(void);
@@ -38,7 +40,10 @@
 
 // Initialization of the program
 program:
-    stmt_seq { root = $1; }  // Store root of AST in global variable
+    stmt_seq {
+        $$ = createNode(PROGRAM_NODE, $1, NULL, NULL);  // Create a program node
+        root = $$;
+    }
     ;
 
 // Statement sequence
@@ -143,39 +148,51 @@ void executeNode(AstNode *node) {
     if (node == NULL) return;
 
     switch (node->nodeType) {
-        case ASSIGN_NODE: { // Handle assignments
+        case PROGRAM_NODE:
+            executeNode(node->left);
+            break;
+        case ASSIGN_NODE: {
+            if (findSymbol(node->left->value, symbolTable) == NULL) {
+                declareVariable(node->left->value, &symbolTable);
+            }
             Symbol *symbol = findSymbol(node->left->value, symbolTable);
-            if (symbol == NULL) {
-                declareVariable(node->left->value, &symbolTable);  // Declare the variable if not found
-                symbol = findSymbol(node->left->value, symbolTable);
-            }
             if (symbol != NULL) {
-                symbol->value = evaluateExpression(node->right, symbolTable);  // Evaluate the right-hand side and assign the value
+                symbol->value = evaluateExpression(node->right, symbolTable);
+                printf("Assigned %d to %s\n", symbol->value, node->left->value);
             }
+            break;
+        }
+        case REPEAT_NODE: {
+            do {
+                executeNode(node->left);
+            } while (!evaluateExpression(node->right, symbolTable));
             break;
         }
         case IF_NODE: {
-            int condition = evaluateExpression(node->left, symbolTable);  // Evaluate condition
-            if (node->right && node->right->nodeType == ELSE_NODE) {
-                // If there is an ELSE_NODE
-                if (condition) {
-                    executeNode(node->right->left);  // Execute THEN branch (node->right->left)
-                } else {
-                    executeNode(node->right->right);  // Execute ELSE branch (node->right->right)
-                }
-            } else {
-                // No ELSE_NODE, only THEN branch exists
-                if (condition) {
-                    executeNode(node->right);  // Execute THEN branch
-                }
-                // If condition is false and no ELSE, do nothing
+            int cond = evaluateExpression(node->left, symbolTable);
+            if (cond) {
+                executeNode(node->right);
+            } else if (node->right && node->right->nodeType == ELSE_NODE) {
+                executeNode(node->right->right);
             }
             break;
         }
+        case READ_NODE: {
+            if (findSymbol(node->value, symbolTable) == NULL) {
+                declareVariable(node->value, &symbolTable);
+            }
+            Symbol *symbol = findSymbol(node->value, symbolTable);
+            printf("Read value for %s\n", node->value);
+            break;
+        }
         case WRITE_NODE: { // Handle write statement
+            if (findSymbol(node->value, symbolTable) == NULL) {
+                fprintf(stderr, "Semantic error: Variable %s not declared.\n", node->value);
+                exit(1);
+            }
             Symbol *symbol = findSymbol(node->value, symbolTable);
             if (symbol != NULL) {
-                /* fprintf(outputFile, "Value of %s: %d\n", node->value, symbol->value);  // Write the value of the variable to the output file */
+                fprintf(outputFile, "%s = %d\n", node->value, symbol->value);
             }
             break;
         }
@@ -190,6 +207,7 @@ void executeNode(AstNode *node) {
     }
 }
 
+
 int main() {
     outputFile = fopen("output.txt", "w");
     if (outputFile == NULL) {
@@ -197,17 +215,26 @@ int main() {
         return 1;
     }
 
-    yyparse();  // Parse the input program and build the AST
+    yyparse();
 
     fprintf(outputFile, "Syntax Tree:\n");
     printTree(root, 0, outputFile);  // Print the syntax tree to the output file
 
-    // Execute the AST to populate the symbol table and perform write operations
-    executeNode(root);
+    assemblyFile = fopen("output.mixal", "w");
+    if (!assemblyFile) {
+        fprintf(stderr, "Error: Could not open output file output.mixal\n");
+        return 1;
+    }
+
+    printf("\nGenerating MIXAL code:\n");
+    generateMixalCode(root);
+    
+    fclose(assemblyFile);  // Close the assembly file
 
     // Now print the symbol table after execution
-    printSymbolTable(symbolTable, outputFile);
+    /* printSymbolTable(symbolTable, outputFile); */
 
-    fclose(outputFile);  // Close the file when done
+    fclose(outputFile);     // Close the output file
+    fclose(assemblyFile);   // Close the assembly file
     return 0;
 }

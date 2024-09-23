@@ -6,6 +6,7 @@
 
 // Define the types of AST nodes as an enum for readability
 typedef enum {
+    PROGRAM_NODE,
     IF_NODE,
     ELSE_NODE,
     ASSIGN_NODE,

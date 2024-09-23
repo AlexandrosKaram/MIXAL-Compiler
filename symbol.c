@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+int next_index = 1;    // Start memory address for variables
+
 // Create a new symbol
 Symbol *createSymbol(char *name, int value) {
     Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
@@ -12,14 +14,13 @@ Symbol *createSymbol(char *name, int value) {
     return symbol;
 }
 
-// Insert a symbol into the symbol table
-void insertSymbol(char *name, int value, Symbol **symbolTable) {
+void insertSymbol(char *name, int value, int memoryLocation, Symbol **symbolTable) {
     Symbol *symbol = createSymbol(name, value);
+    symbol->memoryLocation = memoryLocation;
     symbol->next = *symbolTable;
-    *symbolTable = symbol;  // Update symbolTable in caller
+    *symbolTable = symbol;
 }
 
-// Find a symbol in the symbol table
 Symbol *findSymbol(char *name, Symbol *symbolTable) {
     Symbol *current = symbolTable;
     while (current != NULL) {
@@ -33,8 +34,11 @@ Symbol *findSymbol(char *name, Symbol *symbolTable) {
 
 // Declare a new variable in the symbol table
 void declareVariable(char *name, Symbol **symbolTable) {
-    if (findSymbol(name, *symbolTable) == NULL) {
-        insertSymbol(name, 0, symbolTable);  // Add variable with initial value 0
+    Symbol *existingSymbol = findSymbol(name, *symbolTable);
+
+    if (existingSymbol == NULL) {
+        int memoryLocation = next_index++;
+        insertSymbol(name, 0, memoryLocation, symbolTable);
     }
 }
 
@@ -61,26 +65,25 @@ void printSymbolTable(Symbol *symbolTable, FILE *outputFile) {
 int evaluateExpression(AstNode *node, Symbol *symbolTable) {
     if (node == NULL) return 0;
     switch (node->nodeType) {
-        case CONST_NODE: // Constant
-            return atoi(node->value);  // Convert string constant to integer
-        case IDENT_NODE: { // Identifier
+        case CONST_NODE:
+            return atoi(node->value);
+        case IDENT_NODE: {
             Symbol *symbol = findSymbol(node->value, symbolTable);
-            return symbol ? symbol->value : 0;  // Return the value of the identifier
+            return symbol ? symbol->value : 0;
         }
-        case PLUS_NODE:  // Addition
+        case PLUS_NODE:
             return evaluateExpression(node->left, symbolTable) + evaluateExpression(node->right, symbolTable);
-        case MINUS_NODE:  // Subtraction
+        case MINUS_NODE:
             return evaluateExpression(node->left, symbolTable) - evaluateExpression(node->right, symbolTable);
-        case MUL_NODE:  // Multiplication
+        case MUL_NODE:
             return evaluateExpression(node->left, symbolTable) * evaluateExpression(node->right, symbolTable);
-        case DIV_NODE:  // Division
+        case DIV_NODE:
             return evaluateExpression(node->left, symbolTable) / evaluateExpression(node->right, symbolTable);
-        case LT_NODE:  // Less than comparison
+        case LT_NODE:
             return evaluateExpression(node->left, symbolTable) < evaluateExpression(node->right, symbolTable);
-        case EQ_NODE:  // Equality comparison
+        case EQ_NODE:
             return evaluateExpression(node->left, symbolTable) == evaluateExpression(node->right, symbolTable);
         default:
             return 0;
     }
 }
-

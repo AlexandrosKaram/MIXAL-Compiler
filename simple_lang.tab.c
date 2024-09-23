@@ -75,11 +75,13 @@
     #include <string.h>
     #include "ast.h"  
     #include "symbol.h"
+    #include "assembly_gen.h"
 
     Symbol *symbolTable = NULL;
     struct AstNode *root = NULL;
 
-    FILE *outputFile;  // Declare the file pointer globally or in main
+    FILE *outputFile;
+    FILE *assemblyFile;
 
     void yyerror(const char *s);
     int yylex(void);
@@ -87,7 +89,7 @@
 
 
 /* Line 189 of yacc.c  */
-#line 91 "simple_lang.tab.c"
+#line 93 "simple_lang.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -137,7 +139,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 18 ".\\simple_lang.y"
+#line 20 ".\\simple_lang.y"
 
   int yint;
   char ystr[100];
@@ -146,7 +148,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 150 "simple_lang.tab.c"
+#line 152 "simple_lang.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -158,7 +160,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 162 "simple_lang.tab.c"
+#line 164 "simple_lang.tab.c"
 
 #ifdef short
 # undef short
@@ -451,9 +453,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    41,    41,    46,    47,    52,    53,    54,    55,    56,
-      61,    68,    71,    78,    83,    90,    97,   102,   103,   104,
-     109,   110,   111,   116,   117,   118,   123,   128,   131
+       0,    43,    43,    51,    52,    57,    58,    59,    60,    61,
+      66,    73,    76,    83,    88,    95,   102,   107,   108,   109,
+     114,   115,   116,   121,   122,   123,   128,   133,   136
 };
 #endif
 
@@ -1383,28 +1385,31 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 41 ".\\simple_lang.y"
-    { root = (yyvsp[(1) - (1)].node); ;}
+#line 43 ".\\simple_lang.y"
+    {
+        (yyval.node) = createNode(PROGRAM_NODE, (yyvsp[(1) - (1)].node), NULL, NULL);  // Create a program node
+        root = (yyval.node);
+    ;}
     break;
 
   case 3:
 
 /* Line 1455 of yacc.c  */
-#line 46 ".\\simple_lang.y"
+#line 51 ".\\simple_lang.y"
     { (yyval.node) = createNode(SEQ_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 47 ".\\simple_lang.y"
+#line 52 ".\\simple_lang.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 61 ".\\simple_lang.y"
+#line 66 ".\\simple_lang.y"
     {
         (yyval.node) = createNode(ASSIGN_NODE, createNode(IDENT_NODE, NULL, NULL, (yyvsp[(1) - (3)].ystr)), (yyvsp[(3) - (3)].node), NULL); 
     ;}
@@ -1413,7 +1418,7 @@ yyreduce:
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 68 ".\\simple_lang.y"
+#line 73 ".\\simple_lang.y"
     { 
         (yyval.node) = createNode(IF_NODE, (yyvsp[(2) - (5)].node), (yyvsp[(4) - (5)].node), NULL); 
     ;}
@@ -1422,7 +1427,7 @@ yyreduce:
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 71 ".\\simple_lang.y"
+#line 76 ".\\simple_lang.y"
     { 
         (yyval.node) = createNode(IF_NODE, (yyvsp[(2) - (7)].node), createNode(ELSE_NODE, (yyvsp[(4) - (7)].node), (yyvsp[(6) - (7)].node), NULL), NULL); 
     ;}
@@ -1431,14 +1436,14 @@ yyreduce:
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 78 ".\\simple_lang.y"
+#line 83 ".\\simple_lang.y"
     { (yyval.node) = createNode(REPEAT_NODE, (yyvsp[(2) - (4)].node), (yyvsp[(4) - (4)].node), NULL); ;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 83 ".\\simple_lang.y"
+#line 88 ".\\simple_lang.y"
     {
         (yyval.node) = createNode(READ_NODE, NULL, NULL, strdup((yyvsp[(2) - (2)].ystr))); 
     ;}
@@ -1447,7 +1452,7 @@ yyreduce:
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 90 ".\\simple_lang.y"
+#line 95 ".\\simple_lang.y"
     {
         (yyval.node) = createNode(WRITE_NODE, NULL, NULL, strdup((yyvsp[(2) - (2)].ystr))); 
     ;}
@@ -1456,56 +1461,56 @@ yyreduce:
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 97 ".\\simple_lang.y"
+#line 102 ".\\simple_lang.y"
     { (yyval.node) = (yyvsp[(1) - (1)].node); ;}
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 103 ".\\simple_lang.y"
+#line 108 ".\\simple_lang.y"
     { (yyval.node) = createNode(LT_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 104 ".\\simple_lang.y"
+#line 109 ".\\simple_lang.y"
     { (yyval.node) = createNode(EQ_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 110 ".\\simple_lang.y"
+#line 115 ".\\simple_lang.y"
     { (yyval.node) = createNode(PLUS_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 111 ".\\simple_lang.y"
+#line 116 ".\\simple_lang.y"
     { (yyval.node) = createNode(MINUS_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 117 ".\\simple_lang.y"
+#line 122 ".\\simple_lang.y"
     { (yyval.node) = createNode(MUL_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 118 ".\\simple_lang.y"
+#line 123 ".\\simple_lang.y"
     { (yyval.node) = createNode(DIV_NODE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 123 ".\\simple_lang.y"
+#line 128 ".\\simple_lang.y"
     { 
         char buffer[100];
         snprintf(buffer, sizeof(buffer), "%d", (yyvsp[(1) - (1)].yint));
@@ -1516,7 +1521,7 @@ yyreduce:
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 128 ".\\simple_lang.y"
+#line 133 ".\\simple_lang.y"
     {
         (yyval.node) = createNode(IDENT_NODE, NULL, NULL, strdup((yyvsp[(1) - (1)].ystr)));
     ;}
@@ -1525,14 +1530,14 @@ yyreduce:
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 131 ".\\simple_lang.y"
+#line 136 ".\\simple_lang.y"
     { (yyval.node) = (yyvsp[(2) - (3)].node); ;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1536 "simple_lang.tab.c"
+#line 1541 "simple_lang.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1744,7 +1749,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 134 ".\\simple_lang.y"
+#line 139 ".\\simple_lang.y"
 
 
 // Custom function to handle errors
@@ -1757,39 +1762,49 @@ void executeNode(AstNode *node) {
     if (node == NULL) return;
 
     switch (node->nodeType) {
-        case ASSIGN_NODE: { // Handle assignments
+        case PROGRAM_NODE:
+            executeNode(node->left);
+            break;
+        case ASSIGN_NODE: {
+            if (findSymbol(node->left->value, symbolTable) == NULL) {
+                declareVariable(node->left->value, &symbolTable);
+            }
             Symbol *symbol = findSymbol(node->left->value, symbolTable);
-            if (symbol == NULL) {
-                declareVariable(node->left->value, &symbolTable);  // Declare the variable if not found
-                symbol = findSymbol(node->left->value, symbolTable);
-            }
             if (symbol != NULL) {
-                symbol->value = evaluateExpression(node->right, symbolTable);  // Evaluate the right-hand side and assign the value
+                symbol->value = evaluateExpression(node->right, symbolTable);
             }
+            break;
+        }
+        case REPEAT_NODE: {
+            do {
+                executeNode(node->left);
+            } while (!evaluateExpression(node->right, symbolTable));
             break;
         }
         case IF_NODE: {
-            int condition = evaluateExpression(node->left, symbolTable);  // Evaluate condition
-            if (node->right && node->right->nodeType == ELSE_NODE) {
-                // If there is an ELSE_NODE
-                if (condition) {
-                    executeNode(node->right->left);  // Execute THEN branch (node->right->left)
-                } else {
-                    executeNode(node->right->right);  // Execute ELSE branch (node->right->right)
-                }
-            } else {
-                // No ELSE_NODE, only THEN branch exists
-                if (condition) {
-                    executeNode(node->right);  // Execute THEN branch
-                }
-                // If condition is false and no ELSE, do nothing
+            int cond = evaluateExpression(node->left, symbolTable);
+            if (cond) {
+                executeNode(node->right);
+            } else if (node->right && node->right->nodeType == ELSE_NODE) {
+                executeNode(node->right->right);
             }
             break;
         }
+        case READ_NODE: {
+            if (findSymbol(node->value, symbolTable) == NULL) {
+                declareVariable(node->value, &symbolTable);
+            }
+            Symbol *symbol = findSymbol(node->value, symbolTable);
+            break;
+        }
         case WRITE_NODE: { // Handle write statement
+            if (findSymbol(node->value, symbolTable) == NULL) {
+                fprintf(stderr, "Semantic error: Variable %s not declared.\n", node->value);
+                exit(1);
+            }
             Symbol *symbol = findSymbol(node->value, symbolTable);
             if (symbol != NULL) {
-                /* fprintf(outputFile, "Value of %s: %d\n", node->value, symbol->value);  // Write the value of the variable to the output file */
+                fprintf(outputFile, "%s = %d\n", node->value, symbol->value);
             }
             break;
         }
@@ -1804,6 +1819,7 @@ void executeNode(AstNode *node) {
     }
 }
 
+
 int main() {
     outputFile = fopen("output.txt", "w");
     if (outputFile == NULL) {
@@ -1816,13 +1832,22 @@ int main() {
     fprintf(outputFile, "Syntax Tree:\n");
     printTree(root, 0, outputFile);  // Print the syntax tree to the output file
 
-    // Execute the AST to populate the symbol table and perform write operations
-    executeNode(root);
+    assemblyFile = fopen("output.mixal", "w");
+    if (!assemblyFile) {
+        fprintf(stderr, "Error: Could not open output file output.mixal\n");
+        return 1;
+    }
+
+    printf("\nGenerating MIXAL code:\n");
+    generateMixalCode(root);
+    
+    fclose(assemblyFile);  // Close the assembly file
 
     // Now print the symbol table after execution
     printSymbolTable(symbolTable, outputFile);
 
-    fclose(outputFile);  // Close the file when done
+    fclose(outputFile);     // Close the output file
+    fclose(assemblyFile);   // Close the assembly file
     return 0;
 }
 

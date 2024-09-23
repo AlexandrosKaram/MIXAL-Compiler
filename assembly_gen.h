@@ -2,29 +2,27 @@
 #define ASSEMBLY_GEN_H
 
 #include "ast.h"
+#include "symbol.h"
+#include <stdio.h>
 
-// Αρχικοποίηση του αρχείου εξόδου για τη δημιουργία του κώδικα
-void initAssembly(const char *filename);
+extern FILE *assemblyFile;
+extern Symbol *symbolTable; 
 
-// Συνάρτηση που δημιουργεί κώδικα για εντολές ανάθεσης
-void generateAssign(AstNode *node);
-
-// Συνάρτηση που δημιουργεί κώδικα για εντολές if
-void generateIf(AstNode *node);
-
-// Συνάρτηση που δημιουργεί κώδικα για εντολές repeat
-void generateRepeat(AstNode *node);
-
-// Συνάρτηση που δημιουργεί κώδικα για εντολές write
-void generateWrite(AstNode *node);
-
-// Συνάρτηση που δημιουργεί κώδικα για εντολές read
-void generateRead(AstNode *node);
-
-// Συνάρτηση που δημιουργεί κώδικα για εκφράσεις
-void generateExp(AstNode *node);
-
-// Ολοκλήρωση της εξαγωγής του κώδικα
-void finalizeAssembly(void);
+void generateProgramCode(AstNode* node);
+void generateMixalCode(AstNode* node);
+void generateAssignmentCode(AstNode* node);
+void generateIfCode(AstNode* node);
+void generateWriteCode(AstNode* node);
+void generateSeqCode(AstNode* node);
+void generateNumber(AstNode* node);
+void generateID(AstNode* node);
+void generatePlus(AstNode* node);
+void generateMinus(AstNode* node);
+void generateMul(AstNode* node);
+void generateDiv(AstNode* node);
+void generateLT(AstNode* node);
+void generateEQ(AstNode* node);
+void generateReadCode(AstNode* node);
+void generateRepeatCode(AstNode* node);
 
 #endif // ASSEMBLY_GEN_H

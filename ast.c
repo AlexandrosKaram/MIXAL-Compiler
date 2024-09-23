@@ -20,6 +20,7 @@ void printTree(AstNode *node, int level, FILE *outputFile) {
 
     // Print the node type based on the enum
     switch (node->nodeType) {
+        case PROGRAM_NODE: fprintf(outputFile, "PROGRAM"); break;
         case IF_NODE: fprintf(outputFile, "IF"); break;
         case ELSE_NODE: fprintf(outputFile, "ELSE"); break;
         case ASSIGN_NODE: fprintf(outputFile, "ASSIGN"); break;

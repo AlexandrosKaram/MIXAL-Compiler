@@ -1,23 +1,40 @@
 Syntax Tree:
-SEQ
-  ASSIGN
-    IDENT (x)
-    CONST (1)
-  IF
-    LT
-      IDENT (x)
-      CONST (5)
-    ELSE
-      ASSIGN
+PROGRAM
+  SEQ
+    READ (x)
+    IF
+      LT
+        CONST (0)
         IDENT (x)
-        CONST (2)
-      ASSIGN
-        IDENT (x)
-        CONST (3)
+      SEQ
+        SEQ
+          ASSIGN
+            IDENT (fact)
+            CONST (1)
+          REPEAT
+            SEQ
+              ASSIGN
+                IDENT (fact)
+                MUL
+                  IDENT (fact)
+                  IDENT (x)
+              ASSIGN
+                IDENT (x)
+                MINUS
+                  IDENT (x)
+                  CONST (1)
+            EQ
+              IDENT (x)
+              CONST (0)
+        WRITE (fact)
 
 Symbol Table:
 ===============
 Symbol 1:
   Name  : x
-  Value : 2
+  Value : 0
+---------------
+Symbol 2:
+  Name  : fact
+  Value : 0
 ---------------
