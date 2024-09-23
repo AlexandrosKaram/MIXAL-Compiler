@@ -234,8 +234,6 @@ int main() {
     
     fclose(assemblyFile);  // Close the assembly file
 
-    // Now print the symbol table after execution
-
     fclose(outputFile);     // Close the output file
     fclose(assemblyFile);   // Close the assembly file
     return 0;

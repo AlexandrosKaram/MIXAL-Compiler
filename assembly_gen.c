@@ -142,15 +142,14 @@ void generateDiv(AstNode* node) {
 
     generateMixalCode(node->right);
 
-    // Εκτέλεση της διαίρεσης, αντιστροφή και φόρτωση τιμών
-    fprintf(assemblyFile, " STA SWAPTEMP\n");          // Αποθήκευση του A στο SWAPTEMP
-    fprintf(assemblyFile, " LDX SWAPTEMP\n");          // Φόρτωση του A στον X
-    fprintf(assemblyFile, " LDA TEMP%d\n", divTemp);   // Φόρτωση του προσωρινού αποτελέσματος στον A
-    fprintf(assemblyFile, " STX TEMP%d\n", divTemp);   // Αποθήκευση του X στο TEMP
-    fprintf(assemblyFile, " STA SWAPTEMP\n");          // Αποθήκευση του A στο SWAPTEMP
-    fprintf(assemblyFile, " LDX SWAPTEMP\n");          // Φόρτωση του SWAPTEMP στον X
-    fprintf(assemblyFile, " ENTA 0\n");                // Μηδενισμός του καταχωρητή A
-    fprintf(assemblyFile, " DIV TEMP%d\n", divTemp);   // Διαίρεση με το TEMP
+    fprintf(assemblyFile, " STA SWAPTEMP\n");        
+    fprintf(assemblyFile, " LDX SWAPTEMP\n");      
+    fprintf(assemblyFile, " LDA TEMP%d\n", divTemp);   
+    fprintf(assemblyFile, " STX TEMP%d\n", divTemp); 
+    fprintf(assemblyFile, " STA SWAPTEMP\n");    
+    fprintf(assemblyFile, " LDX SWAPTEMP\n");        
+    fprintf(assemblyFile, " ENTA 0\n");            
+    fprintf(assemblyFile, " DIV TEMP%d\n", divTemp); 
 }
 
 
@@ -179,9 +178,8 @@ void generateEQ(AstNode* node) {
 
 void generateReadCode(AstNode* node) {
     Symbol *symbol = findSymbol(node->value, symbolTable);
-    printf("Mphke sthn generate Read Code\n");
+
     if (symbol != NULL) {
-        printf("To symbol htan diaforo tou NULL\n");
         int input_buffer_address = 1000;
         int input_device = 19;
 
