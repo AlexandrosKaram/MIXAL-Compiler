@@ -179,7 +179,9 @@ void generateEQ(AstNode* node) {
 
 void generateReadCode(AstNode* node) {
     Symbol *symbol = findSymbol(node->value, symbolTable);
+    printf("Mphke sthn generate Read Code\n");
     if (symbol != NULL) {
+        printf("To symbol htan diaforo tou NULL\n");
         int input_buffer_address = 1000;
         int input_device = 19;
 

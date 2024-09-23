@@ -217,8 +217,11 @@ int main() {
 
     yyparse();
 
+    executeNode(root);  // Execute the AST
+
     fprintf(outputFile, "Syntax Tree:\n");
     printTree(root, 0, outputFile);  // Print the syntax tree to the output file
+    printSymbolTable(symbolTable, outputFile);
 
     assemblyFile = fopen("output.mixal", "w");
     if (!assemblyFile) {
@@ -232,7 +235,6 @@ int main() {
     fclose(assemblyFile);  // Close the assembly file
 
     // Now print the symbol table after execution
-    /* printSymbolTable(symbolTable, outputFile); */
 
     fclose(outputFile);     // Close the output file
     fclose(assemblyFile);   // Close the assembly file
