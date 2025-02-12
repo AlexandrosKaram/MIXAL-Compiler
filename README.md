@@ -1,1 +1,1 @@
-Simple Langugage Compiler
+Simple Language Compiler
